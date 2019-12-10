@@ -26,6 +26,7 @@ Implemented a goroutine to remove least used key based on the readThreshold load
 go run app.go
 
 Environment Variables required to run the application:
-CACHE_GC_INTERVAL=5
-DEFAULT_CACHE_SIZE=25
-CACHE_READ_TIMEOUT_THRESHOLD=30 
+
+- CACHE_GC_INTERVAL=5
+- DEFAULT_CACHE_SIZE=25
+- CACHE_READ_TIMEOUT_THRESHOLD=30 
