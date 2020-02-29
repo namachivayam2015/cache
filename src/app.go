@@ -2,14 +2,14 @@ package main
 
 
 import (
-	"app"
 	"fmt"
 	"github.com/gorilla/handlers"
+	"test.mydomain.com/cache/cache"
+	"test.mydomain.com/cache/util"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
-	"util"
 )
 
 func main() {
@@ -23,14 +23,14 @@ func main() {
 
 	timeOutThreshold, er := strconv.Atoi(os.Getenv("CACHE_READ_TIMEOUT_THRESHOLD"))
 	if er != nil {
-		fmt.Println("INFO : Default Size not specified")
+		fmt.Println("INFO : Default Read Timeout not specified")
 	} else {
 		util.ReadThresholdInSec = timeOutThreshold
 	}
 
 	go cacheGC()
 
-	router := app.NewRouter()
+	router := cache.NewRouter()
 
 	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
 	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})

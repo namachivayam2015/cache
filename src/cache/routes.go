@@ -1,4 +1,4 @@
-package app
+package cache
 
 import (
 	"github.com/gorilla/mux"
@@ -60,15 +60,10 @@ var routes = Routes{
 	func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
-	var handler http.Handler
+	var handler http.HandlerFunc
 	log.Println(route.Name)
 	handler = route.HandlerFunc
-
-	router.
-	Methods(route.Method).
-	Path(route.Pattern).
-	Name(route.Name).
-	Handler(handler)
+	router.Methods(route.Method).Path(route.Pattern).Name(route.Name).Handler(control.basicAuth(handler))
 	}
 	return router
 	}

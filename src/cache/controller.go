@@ -1,12 +1,13 @@
-package app
+package cache
 
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"test.mydomain.com/cache/util"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"util"
+	"os"
 )
 
 type Controller struct {
@@ -116,4 +117,24 @@ func (c *Controller) getAll(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	output, _ := json.Marshal(dataList)
 	w.Write(output)
+}
+
+func (c *Controller) basicAuth(handler http.HandlerFunc) http.HandlerFunc{
+	return func(w http.ResponseWriter, r *http.Request) {
+		var user, pass, ok= r.BasicAuth();
+		if !ok {
+			w.WriteHeader(http.StatusForbidden)
+		} else {
+			if !(user == os.Getenv("BASIC_AUTH_USERNAME") && pass == os.Getenv("BASIC_AUTH_PASSWORD")) {
+				w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+				w.WriteHeader(http.StatusUnauthorized)
+			} else {
+				if r.Header.Get("Content-Type") == "application/json" {
+					handler(w, r)
+				}else{
+					w.WriteHeader(http.StatusUnsupportedMediaType)
+				}
+			}
+		}
+	}
 }

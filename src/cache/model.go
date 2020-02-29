@@ -1,4 +1,4 @@
-package app
+package cache
 
 type CacheData struct {
 	Key string `json:"key"`
