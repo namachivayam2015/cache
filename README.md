@@ -11,6 +11,13 @@ Implemented a goroutine to remove least used key based on the readThreshold load
 
 *Port :8080*
 
+#### Headers
+
+
+*Content-Type* : application/json
+
+*Authorization* : Basic base64($BASIC_AUTH_USERNAME:$BASIC_AUTH_PASSWORD)
+
 |Method|URI|Description|
 |------|----|----------|
 |POST|/add|Add Key/Value to Cache|
@@ -25,8 +32,20 @@ Implemented a goroutine to remove least used key based on the readThreshold load
 
 go run app.go
 
-Environment Variables required to run the application:
+# To build image & run the image
+
+
+cd src/
+
+docker build . -t go-cache
+
+docker run --env-file .\variables.env -d -p 8080:8080 go-cache:latest
+
+
+##### Environment Variables required to run the application:
 
 - CACHE_GC_INTERVAL=5
 - DEFAULT_CACHE_SIZE=25
 - CACHE_READ_TIMEOUT_THRESHOLD=30 
+- BASIC_AUTH_USERNAME=testuser
+- BASIC_AUTH_PASSWORD=testpassword
